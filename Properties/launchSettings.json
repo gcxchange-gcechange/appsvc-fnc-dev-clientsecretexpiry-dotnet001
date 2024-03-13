@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "appsvc_fnc_dev_clientsecretexpiry_dotnet001": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7160",
+      "launchBrowser": false
+    }
+  }
+}
