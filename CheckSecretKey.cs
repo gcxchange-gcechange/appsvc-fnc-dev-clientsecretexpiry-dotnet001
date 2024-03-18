@@ -11,8 +11,6 @@ using Newtonsoft.Json;
 using static appsvc_fnc_dev_clientsecretexpiry_dotnet001.Auth;
 using Microsoft.Graph.Models;
 using System.Text;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 {
@@ -47,11 +45,7 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
     {
         // Runs at 07:00 on Sunday
         [FunctionName("CheckSecretKey")]
-        //public static async Task<IActionResult> Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer, ILogger log)
-
-        // test to run on Thursday (tomorrow)
-        //public static async Task<IActionResult> Run([TimerTrigger("0 0 7 * * 4")] TimerInfo myTimer, ILogger log)
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function CheckSecretKey began execution at: {DateTime.Now}");
 
@@ -73,10 +67,6 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
             {
                 var apps = await graphClient.Applications.GetAsync((requestConfiguration) =>
                 {
-                    //Parsing OData Select and Expand failed: Term 'id,displayName,PasswordCredentials?fields=DisplayName,EndDateTime' is not valid in a $select or $expand expression
-                    //requestConfiguration.QueryParameters.Select = new string[] { "id", "displayName", "PasswordCredentials?fields=DisplayName,EndDateTime" };
-                    //Property 'PasswordCredentials' on type 'microsoft.graph.application' is not a navigation property or complex property. Only navigation properties can be expanded.
-                    //requestConfiguration.QueryParameters.Expand = new string[] { "PasswordCredentials($select=DisplayName,EndDateTime)" };
                     requestConfiguration.QueryParameters.Select = new string[] { "Id", "displayName", "PasswordCredentials" };
                 });
 
