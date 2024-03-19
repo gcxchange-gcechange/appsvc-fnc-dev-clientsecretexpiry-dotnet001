@@ -45,7 +45,7 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
     {
         // Runs at 07:00 on Sunday
         [FunctionName("CheckSecretKey")]
-        public static async Task<IActionResult> Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer, ILogger log)
+        public static async Task Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function CheckSecretKey began execution at: {DateTime.Now}");
 
@@ -124,8 +124,6 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
             SendEmailNotification(applicationsExpired, applicationsCritical, applicationsWarning, log);
 
             log.LogInformation($"C# Timer trigger function CheckSecretKey finished execution at: {DateTime.Now}");
-
-            return new OkResult();
         }
 
         public static async void SendEmailNotification(List<Application> applicationsExpired, List<Application> applicationsCritical, List<Application> applicationsWarning, ILogger log)
