@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +37,7 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
     {
         Critical = 0,
         Expired = 1,
-        Warning = 2,
+        Warning = 2
     }
 
     public class CheckSecretKey
@@ -50,8 +49,6 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
             log.LogInformation($"C# Timer trigger function CheckSecretKey began execution at: {DateTime.Now}");
 
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
-            string delegatedUserName = config["delegatedUserName"];
-            string delegatedUserSecret = config["delegatedUserSecret"];
 
             List<Application> applications = new List<Application>();
             List<Application> applicationsExpired = new List<Application>();
@@ -60,8 +57,7 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 
             DateTime currentDateTime = DateTime.Now;
 
-            ROPCConfidentialTokenCredential auth = new ROPCConfidentialTokenCredential(delegatedUserName, delegatedUserSecret, log);
-            var graphClient = new GraphServiceClient(auth);
+            var graphClient = graphAuth(log);
 
             try
             {

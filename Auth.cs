@@ -3,6 +3,7 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,55 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 {
     internal class Auth
     {
+        public static GraphServiceClient graphAuth(ILogger log)
+        {
+            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
+
+            var scopes = new string[] { "https://graph.microsoft.com/.default" };
+
+            var keyVaultUrl = config["keyVaultUrl"];
+            var keyname = config["secretName"];
+            var tenantid = config["tenantId"];
+            var clientID = config["clientId"];
+
+            SecretClientOptions optionsSecret = new SecretClientOptions()
+            {
+                Retry =
+                {
+                    Delay= TimeSpan.FromSeconds(2),
+                    MaxDelay = TimeSpan.FromSeconds(16),
+                    MaxRetries = 5,
+                    Mode = RetryMode.Exponential
+                 }
+            };
+
+            var client = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential(), optionsSecret);
+            KeyVaultSecret secret = client.GetSecret(keyname);
+            var clientSecret = secret.Value;
+
+            // using Azure.Identity;
+            var options = new TokenCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+            };
+
+            // https://docs.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
+            var clientSecretCredential = new ClientSecretCredential(tenantid, clientID, clientSecret, options);
+
+            try
+            {
+                var graphClient = new GraphServiceClient(clientSecretCredential, scopes);
+                return graphClient;
+            }
+            catch (Exception e)
+            {
+                log.LogInformation($"Message: {e.Message}");
+                if (e.InnerException is not null)
+                    log.LogInformation($"InnerException: {e.InnerException.Message}");
+                return null;
+            }
+        }
+
         public class ROPCConfidentialTokenCredential : Azure.Core.TokenCredential
         {
             string _clientId;
