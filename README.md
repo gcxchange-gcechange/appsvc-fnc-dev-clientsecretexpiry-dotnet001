@@ -16,7 +16,6 @@ The following user accounts (as reflected in the app settings) are required:
 
 | Account           | Membership requirements                               |
 | ----------------- | ----------------------------------------------------- |
-| delegatedUserName | n/a                                                   |
 | emailUserName     | n/a                                                   |
 
 Note that user account design can be modified to suit your environment
@@ -31,7 +30,7 @@ MSGraph
 
 | API / Permissions name    | Type        | Admin consent | Justification                       |
 | ------------------------- | ----------- | ------------- | ----------------------------------- |
-| Application.Read.All      | Delegated   | Yes           | Read applications                   |
+| Application.Read.All      | Application | Yes           | Read all applications               |
 | Mail.Send                 | Delegated   | Yes           | Send mail as a user                 | 
 | User.Read                 | Delegated   | No            | Sign in and read user profile       |
 
@@ -45,8 +44,6 @@ n/a
 | ----------------------- | ------------------------------------------------------------------------------ |
 | AzureWebJobsStorage     | Connection string for the storage acoount                                      |
 | clientId                | The application (client) ID of the app registration                            |
-| delegatedUserName       | User principal name for the service account that reads application and secrets |
-| delegatedUserSecret     | Secret name for delegatedUserName                                              |
 | emailUserId			  | Object Id for the email user account                                           |
 | emailUserName           | Email address used to send notifications                                       |
 | emailUserSecret         | Secret name for emailUserSecret                                                |

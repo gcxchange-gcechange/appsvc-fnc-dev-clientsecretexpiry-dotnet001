@@ -74,7 +74,6 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
             string _username;
             ILogger _log;
 
-            // TEMP
             public ROPCConfidentialTokenCredential(string userName, string userSecretName, ILogger log)
             {
                 IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
