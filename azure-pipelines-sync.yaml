@@ -6,8 +6,7 @@ resources:
   - repository: 'appsvc-fnc-dev-clientsecretexpiry-dotnet001'
     type: git
     name: 'GCExchange/appsvc-fnc-dev-clientsecretexpiry-dotnet001'
-pool:
-  vmImage: 'TBS Linux Self Hosted'
+pool: TBS Linux Self Hosted
 jobs:
   - job: sync
     uses:
