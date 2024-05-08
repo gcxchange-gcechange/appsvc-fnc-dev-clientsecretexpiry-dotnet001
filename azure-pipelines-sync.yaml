@@ -5,7 +5,7 @@ resources:
   repositories:
   - repository: appsvc-fnc-dev-clientsecretexpiry-dotnet001
     type: git
-    name: GCExchange/appsvc-fnc-dev-clientsecretexpiry-dotnet001
+    name: 'GCExchange/appsvc-fnc-dev-clientsecretexpiry-dotnet001'
 
 pool:
   vmImage: TBS Linux Self Hosted
