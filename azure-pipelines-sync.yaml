@@ -3,7 +3,7 @@ trigger:
 
 resources:
   repositories:
-  - repository: appsvc-fnc-dev-clientsecretexpiry-dotnet001
+  - repository: 'appsvc-fnc-dev-clientsecretexpiry-dotnet001'
     type: git
     name: 'GCExchange/appsvc-fnc-dev-clientsecretexpiry-dotnet001'
 
@@ -13,7 +13,7 @@ jobs:
   - job: sync
     uses:
      repositories:
-       - appsvc-fnc-dev-clientsecretexpiry-dotnet001
+       - 'appsvc-fnc-dev-clientsecretexpiry-dotnet001'
     steps:
     - script: |
         echo Sync azure repo
