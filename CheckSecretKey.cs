@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
@@ -11,6 +6,7 @@ using static appsvc_fnc_dev_clientsecretexpiry_dotnet001.Auth;
 using Microsoft.Graph.Models;
 using System.Text;
 using Microsoft.Kiota.Abstractions;
+using Microsoft.Azure.Functions.Worker;
 
 namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 {
@@ -43,9 +39,16 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 
     public class CheckSecretKey
     {
+        private readonly ILogger<CheckSecretKey> log;
+
+        public CheckSecretKey(ILogger<CheckSecretKey> logger)
+        {
+            log = logger;
+        }
+        
         // Runs at 07:00 on Sunday
-        [FunctionName("CheckSecretKey")]
-        public static async Task Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer, ILogger log)
+        [Function("CheckSecretKey")]
+        public async Task Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer)
         {
             log.LogInformation($"C# Timer trigger function CheckSecretKey began execution at: {DateTime.Now}");
 
@@ -137,12 +140,12 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
                 log.LogError($"StackTrace: {e.StackTrace}");
             }
 
-            SendEmailNotification(applicationsExpired, applicationsCritical, applicationsWarning, log);
+            await SendEmailNotification(applicationsExpired, applicationsCritical, applicationsWarning, log);
 
             log.LogInformation($"C# Timer trigger function CheckSecretKey finished execution at: {DateTime.Now}");
         }
 
-        public static async void SendEmailNotification(List<Application> applicationsExpired, List<Application> applicationsCritical, List<Application> applicationsWarning, ILogger log)
+        public static async Task SendEmailNotification(List<Application> applicationsExpired, List<Application> applicationsCritical, List<Application> applicationsWarning, ILogger log)
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
             string emailUserId = config["emailUserId"];
