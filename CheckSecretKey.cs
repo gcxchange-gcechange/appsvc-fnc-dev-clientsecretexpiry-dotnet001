@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using static appsvc_fnc_dev_clientsecretexpiry_dotnet001.Auth;
 using Microsoft.Graph.Models;
 using System.Text;
+using Microsoft.Kiota.Abstractions;
 
 namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
 {
@@ -70,6 +71,25 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
                 {
                     applications.Add(JsonConvert.DeserializeObject<Application>(JsonConvert.SerializeObject(app)));
                 }
+
+                // check nextlink for more data from the collection
+                while (apps.OdataNextLink != null)
+                {
+                    var nextPageRequestInformation = new RequestInformation
+                    {
+                        HttpMethod = Method.GET,
+                        UrlTemplate = apps.OdataNextLink
+                    };
+
+                    apps = await graphClient.RequestAdapter.SendAsync(nextPageRequestInformation, (parseNode) => new ApplicationCollectionResponse());
+
+                    foreach (var app in apps.Value)
+                    {
+                        applications.Add(JsonConvert.DeserializeObject<Application>(JsonConvert.SerializeObject(app)));
+                    }
+                }
+
+                log.LogInformation($"applications.Count: {applications.Count}");
 
                 applications = applications.OrderBy(o => o.DisplayName).ToList();
 
