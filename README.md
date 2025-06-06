@@ -57,6 +57,7 @@ n/a
 Version|Date|Comments
 -------|----|--------
 1.0|TBD|Initial release
+1.1|2025-06-06|dotnet8 upgrade
 
 ## Disclaimer
 
