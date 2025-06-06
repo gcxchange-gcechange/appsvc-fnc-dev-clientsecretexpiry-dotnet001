@@ -22,7 +22,7 @@ Note that user account design can be modified to suit your environment
 
 ## Version 
 
-![dotnet 6](https://img.shields.io/badge/net6.0-blue.svg)
+![dotnet 8](https://img.shields.io/badge/net8.0-blue.svg)
 
 ## API permission
 
