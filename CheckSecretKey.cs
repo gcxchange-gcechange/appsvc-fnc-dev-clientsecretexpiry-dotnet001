@@ -45,8 +45,7 @@ namespace appsvc_fnc_dev_clientsecretexpiry_dotnet001
         {
             log = logger;
         }
-        
-        // Runs at 07:00 on Sunday
+
         [Function("CheckSecretKey")]
         public async Task Run([TimerTrigger("0 0 7 * * 0")]TimerInfo myTimer)
         {
