@@ -1,17 +1,16 @@
 {
   "version": "2.0",
   "logging": {
-    "fileLoggingMode": "always",
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
         "excludedTypes": "Request"
       }
-    }
-  },
-  "extensions": {
-    "queues": {
-      "batchSize": 1
+    },
+    "logLevel": {
+      "default": "Trace",
+      "Function": "Trace",
+      "Host.Results": "Trace"
     }
   }
 }
